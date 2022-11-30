@@ -5,16 +5,27 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] int health;
+    [SerializeField] int maxHealth;
+    [SerializeField] HealthBar hpBar;
+    public int attack;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        health = maxHealth;
+        hpBar.SetHealth(health,maxHealth);
     }
-
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D col)
     {
-        
+        if(col.gameObject.CompareTag("Damage")){
+            TakeDamage(1);
+        }
+    }   
+    void TakeDamage(int damage){
+        health -= damage;
+        if(health <= 0){
+            Destroy(gameObject);
+        }else{
+            hpBar.SetHealth(health, maxHealth);
+        }
     }
 }

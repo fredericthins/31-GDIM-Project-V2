@@ -23,6 +23,13 @@ public class PlayerMovement : MonoBehaviour
 
     bool isFacingRight = true;
 
+    //Dash Variables
+    //Dash State Variable
+    bool isDashing = false;
+    //Dash Cooldown
+    bool canDash = true;
+    public bool isInvincible = false;
+    [SerializeField] float dashCooldown;
     [SerializeField] float dodgeRollForce;
 
     // Start is called before the first frame update
@@ -58,8 +65,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Basic Horizontal Movement: Reads the horizontal input and set the rb.velocity to a product of horizontal input and set value xSpeed
-        float x = Input.GetAxis("Horizontal");
-        Walk(x);
+        float xInput = Input.GetAxis("Horizontal");
+        float yInput = Input.GetAxis("Vertical");
+        Walk(xInput);
 
         //Jump: There are two versions of jumping: short/quick jump and longer/floaty jump. This is controlled by how long the player holds the jump button
         if (Input.GetButtonDown("Jump") && onGround)
@@ -79,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
         //Dodge Roll - Add a force to the player and temporarily disable their collider (giving them i-frames)
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            DodgeRoll();
+            StartCoroutine(DodgeRoll(xInput, yInput));
         }
     }
 
@@ -94,7 +102,9 @@ public class PlayerMovement : MonoBehaviour
     //Simple Horizontal Movement based on setting speed rather than setting position, because this allows smoother flow in play
     public void Walk(float xSpeed)
     {
-        rb.velocity = new Vector2(xSpeed * moveSpeed, rb.velocity.y);
+        if(!isDashing){
+            rb.velocity = new Vector2(xSpeed * moveSpeed, rb.velocity.y);
+        }
     }
 
     //Jump Function: Initial set of the product of a basic Vector2.up and a set value of jumpSpeed
@@ -109,18 +119,27 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, -slideSpeed);
     }
 
-    private void DodgeRoll()
+    //Allows players to Dash in the inputted direction - Will be invincible temporarily
+    IEnumerator DodgeRoll(float xDir, float yDir)
     {
-        rb.velocity = Vector2.zero;
-        Debug.Log("Dodgeroll");
-        if (isFacingRight)
-        {
-            Debug.Log("DR");
-            rb.velocity = Vector2.right * dodgeRollForce;
+        if(canDash){
+            isDashing = true;
+            isInvincible = true;
+
+            StartCoroutine(DodgeRollCooldown(dashCooldown));
+            rb.velocity = Vector2.zero;
+            rb.AddForce(new Vector2(xDir, yDir) * dodgeRollForce, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.3f);
+
+            isInvincible = false;
+            isDashing = false;
         }
-        else
-        {
-            rb.velocity = Vector2.left * dodgeRollForce;
-        }
+    }
+
+    //Prevent Players from spamming dash
+    IEnumerator DodgeRollCooldown(float dashCooldown){
+        canDash = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 }
