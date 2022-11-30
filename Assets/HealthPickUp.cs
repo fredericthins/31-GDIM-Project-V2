@@ -12,11 +12,14 @@ public class HealthPickUp : MonoBehaviour
         {
             //Gather player health/combat stats
             PlayerCombat player = collision.gameObject.GetComponent<PlayerCombat>();
-            //Player heals/takes negative damage - functionally the same
-            player.TakeDamage(-healthValue);
-            
-            //Destroy itself
-            Destroy(gameObject);
+            if(player.health < player.maxHealth){
+                //Player heals/takes negative damage - functionally the same
+                player.TakeDamage(-healthValue);
+                
+                //Destroy itself
+                Destroy(gameObject);
+            }
+
         }
     }
 }

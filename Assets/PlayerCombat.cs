@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     PlayerMovement playerMovement;
+    Animator playerAnim;
 
     //For our attack, the script will use a collider element in order to represent the "weapon"
     [SerializeField] GameObject hitCollider;
@@ -21,8 +22,8 @@ public class PlayerCombat : MonoBehaviour
     
     //Health Variables
     //Current Health
-    [SerializeField] int health;
-    [SerializeField] int maxHealth;
+    public int health;
+    public int maxHealth;
     [SerializeField] HealthBar hpBar;
 
     void Awake()
@@ -31,6 +32,7 @@ public class PlayerCombat : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         health = maxHealth;
         hpBar.SetHealth(health,maxHealth);
+        playerAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -49,7 +51,7 @@ public class PlayerCombat : MonoBehaviour
         if(!isAttacking){
             //Cooldown/Interval between every attack
             StartCoroutine(AttackCooldown(atkSpd));
-
+            playerAnim.SetTrigger("Attack");
             //Controls the active time for hitbox
             //time = frames where we want the sword to do damage within each attack
             hitCollider.SetActive(true);

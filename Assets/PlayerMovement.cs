@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //Purpose: Controls Player Movement
 public class PlayerMovement : MonoBehaviour
 {
+    Animator playerAnim;
     Rigidbody2D rb;
+    SpriteRenderer sprite;
 
     //Jump Values
     [SerializeField] float moveSpeed;
@@ -14,8 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float lowJumpMultiplier = 2.5f;
 
     //Detection values
-    bool onGround;
-    bool onWall;
+    public bool onGround;
+    public bool onWall;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Vector2 bottomOffset, horizontalOffset;
     [SerializeField] float collisionRadius;
@@ -32,10 +35,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dashCooldown;
     [SerializeField] float dodgeRollForce;
 
+    //Color Variables
+    [SerializeField] Color dashColor = Color.blue;
+    [SerializeField] Color normColor = Color.white;
+
     // Start is called before the first frame update
     void Start()
     {
+        playerAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -89,6 +98,12 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(DodgeRoll(xInput, yInput));
         }
+
+        //Animator Updates
+        playerAnim.SetBool("IsRunning", rb.velocity.x != 0);
+        playerAnim.SetFloat("ySpeed", rb.velocity.y);
+        playerAnim.SetBool("OnGround", onGround);
+        playerAnim.SetBool("OnWall", onWall);
     }
 
     //For testing and visualizing the detection for OnWall and OnGround
@@ -125,12 +140,14 @@ public class PlayerMovement : MonoBehaviour
         if(canDash){
             isDashing = true;
             isInvincible = true;
+            sprite.color = dashColor;
 
             StartCoroutine(DodgeRollCooldown(dashCooldown));
             rb.velocity = Vector2.zero;
             rb.AddForce(new Vector2(xDir, yDir) * dodgeRollForce, ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.3f);
 
+            sprite.color = normColor;
             isInvincible = false;
             isDashing = false;
         }
