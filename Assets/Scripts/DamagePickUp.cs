@@ -10,6 +10,8 @@ public class DamagePickUp : MonoBehaviour
         //Check for player
         if (collision.CompareTag("Player"))
         {
+            //Plays the sound effect for collecting the power up 
+            SoundManagerScript.PlaySound("powerUp");
             //Gather player health/combat stats
             PlayerCombat player = collision.gameObject.GetComponent<PlayerCombat>();
             //Player's attack speed is boosted for poweruptime seconds

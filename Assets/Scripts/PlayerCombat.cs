@@ -72,9 +72,10 @@ public class PlayerCombat : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            //Take Damage and Play Hurt Animations
+            //Take Damage and Play Hurt Animations alongside sound
+            SoundManagerScript.PlaySound("playerDmg");
             //Check if Enemy Script first
-            if(collision.gameObject.GetComponent<Enemy>() && !playerMovement.isInvincible){
+            if (collision.gameObject.GetComponent<Enemy>() && !playerMovement.isInvincible){
                 Enemy attacker = collision.gameObject.GetComponent<Enemy>();
                 TakeDamage(attacker.attack);
             }
@@ -83,6 +84,8 @@ public class PlayerCombat : MonoBehaviour
 
     //Invoke when player takes damage - update HP bar
     public void TakeDamage(int damage){
+
+
         health -= damage;
         hpBar.SetHealth(health, maxHealth);
         if(health <= 0){

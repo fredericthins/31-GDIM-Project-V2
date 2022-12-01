@@ -22,6 +22,10 @@ public class Enemy : MonoBehaviour
         }
     }   
     void TakeDamage(int damage){
+
+        //Plays the sound effect for enemies taking damage.
+        SoundManagerScript.PlaySound("dmgHit");
+
         health -= damage;
         if(health <= 0){
             ScoreManager._instance.UpdateScore(enemyScore);
