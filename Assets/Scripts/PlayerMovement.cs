@@ -81,6 +81,9 @@ public class PlayerMovement : MonoBehaviour
         //Jump: There are two versions of jumping: short/quick jump and longer/floaty jump. This is controlled by how long the player holds the jump button
         if (Input.GetButtonDown("Jump") && onGround)
         {
+            //Plays the sound effect for the player jumping
+            SoundManagerScript.PlaySound("playerJump");
+
             Jump();
         }
         //In general, the jump will follow the fallMultipler fallspeed. Mostly for falling from edges and long jumps
@@ -96,6 +99,9 @@ public class PlayerMovement : MonoBehaviour
         //Dodge Roll - Add a force to the player and temporarily disable their collider (giving them i-frames)
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            //Plays the sound effect for dashing
+            SoundManagerScript.PlaySound("playerDash");
+
             StartCoroutine(DodgeRoll(xInput, yInput));
         }
 

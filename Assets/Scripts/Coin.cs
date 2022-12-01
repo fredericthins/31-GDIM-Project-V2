@@ -12,6 +12,10 @@ public class Coin : MonoBehaviour
         //Check for player
         if (collision.CompareTag("Player"))
         {
+            //Plays the sound effect for collecting a coin
+            SoundManagerScript.PlaySound("coinCollected");
+
+
             //Call on the scoreManager singleton to update
             ScoreManager._instance.UpdateScore(coinValue);
             //Destroy itself
