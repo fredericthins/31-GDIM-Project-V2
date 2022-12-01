@@ -15,6 +15,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpSpeed;
     [SerializeField] float fallMultiplier = 2f;
     [SerializeField] float lowJumpMultiplier = 2.5f;
+    bool isJumpBoosted = false;
+    [SerializeField] GameObject jumpBoostIcon;
+    bool isRunBoosted = false;
+    [SerializeField] GameObject runBoostIcon;
+
 
     //Detection values
     public bool onGround;
@@ -158,5 +163,44 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+    }
+
+    //Increases Jumpspeed variable
+    public void JumpBoosted(float time){
+        if(!isJumpBoosted){
+            StartCoroutine(JBoostCooldown(time));
+        }
+    }
+    IEnumerator JBoostCooldown(float time){
+        isJumpBoosted = true;
+        jumpBoostIcon.SetActive(true);
+
+        //Set the current attack speed to an enhanced version
+        jumpSpeed += 1f;
+        yield return new WaitForSeconds(time);
+        //Return to base Attack Speed
+        jumpSpeed -= 1f;
+
+        jumpBoostIcon.SetActive(false);
+        isJumpBoosted = false;
+    }
+
+    public void RunBoosted(float time){
+        if(!isRunBoosted){
+            StartCoroutine(RBoostCooldown(time));
+        }
+    }
+    IEnumerator RBoostCooldown(float time){
+        isRunBoosted = true;
+        runBoostIcon.SetActive(true);
+
+        //Set the current attack speed to an enhanced version
+        moveSpeed += 1f;
+        yield return new WaitForSeconds(time);
+        //Return to base Attack Speed
+        moveSpeed -= 1f;
+
+        runBoostIcon.SetActive(false);
+        isRunBoosted = false;
     }
 }

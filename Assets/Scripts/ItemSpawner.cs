@@ -6,7 +6,6 @@ using UnityEngine;
 public class ItemSpawner : MonoBehaviour
 {
     [SerializeField] AnimationCurve diffCurve;
-    [SerializeField] GameObject[] items;
     [SerializeField] Transform spawnPos;
     [SerializeField] float spawnTimer;
     bool onSpawnCooldown = false;
@@ -21,8 +20,8 @@ public class ItemSpawner : MonoBehaviour
 
     //Spawn a random item
     void Spawn(){
-        int randomIndex = Random.Range(0, items.Length);
-        Instantiate(items[randomIndex], transform);
+        int randomIndex = Random.Range(0, GameManager._instance.items.Count);
+        Instantiate(GameManager._instance.items[randomIndex], transform);
         StartCoroutine(StartSpawnCooldown());
     }
 

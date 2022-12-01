@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     PlayerMovement playerMovement;
+    
     Animator playerAnim;
 
     //For our attack, the script will use a collider element in order to represent the "weapon"
@@ -87,6 +88,7 @@ public class PlayerCombat : MonoBehaviour
         hpBar.SetHealth(health, maxHealth);
         if(health <= 0){
             // Die/End Scene
+            GameManager._instance.GameOver();
         }
     }
 
