@@ -7,7 +7,7 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI scoreText;
-    int score = 0;
+    public int score = 0;
     public static ScoreManager _instance;
 
     //Singleton Implementation, because there will only be no duplicate score managers.
@@ -35,6 +35,6 @@ public class ScoreManager : MonoBehaviour
 
     public void UpdateText()
     {
-        scoreText.text = "x " + score;
+        scoreText.text = "Score: " + score;
     }
 }

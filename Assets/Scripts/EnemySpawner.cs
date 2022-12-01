@@ -5,6 +5,7 @@ using UnityEngine;
 //Purpose: Spawn Random Enemy in Time Intervals
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] AnimationCurve diffCurve;
     [SerializeField] GameObject[] items;
     [SerializeField] Transform spawnPos;
     [SerializeField] float spawnTimer;
@@ -28,6 +29,9 @@ public class EnemySpawner : MonoBehaviour
     //Keep Track of Spawner Cooldown
     IEnumerator StartSpawnCooldown(){
         onSpawnCooldown = true;
+        
+        //Reduces the spawn timer based on score
+        spawnTimer = diffCurve.Evaluate(ScoreManager._instance.score);
         yield return new WaitForSeconds(spawnTimer);
         onSpawnCooldown = false;
     }

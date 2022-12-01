@@ -170,6 +170,7 @@ MonoBehaviour:
   health: 3
   maxHealth: 3
   hpBar: {fileID: 3472279286606034917}
+  enemyScore: 3
   attack: 1
 --- !u!114 &3472279286606034917
 MonoBehaviour:

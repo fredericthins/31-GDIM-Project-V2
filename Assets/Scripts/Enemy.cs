@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] int health;
     [SerializeField] int maxHealth;
     [SerializeField] HealthBar hpBar;
+    [SerializeField] int enemyScore;
     public int attack;
 
     void Awake()
@@ -23,6 +24,7 @@ public class Enemy : MonoBehaviour
     void TakeDamage(int damage){
         health -= damage;
         if(health <= 0){
+            ScoreManager._instance.UpdateScore(enemyScore);
             Destroy(gameObject);
         }else{
             hpBar.SetHealth(health, maxHealth);
